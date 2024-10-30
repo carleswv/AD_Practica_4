@@ -211,7 +211,12 @@ Esto se debe a que en realidad esta distancia es invariante a transformaciones l
 
 ### Respuesta al apartado b
 
-Hay que hacer un gráfico de la distribución de una $\chi^2$ con $p$ grados de libertad (o simular 100 de manera random) y mostrar en el mismo gráfico la distribución de los $100$ valores del apartado a al cuadrado:
+Hacemos una prueba de bondad de ajuste:
+
+```{r}
+ks.test(dmahalanobis^2, "pchisq", df = 3)
+```
+Falta hacer un histograma representando la función de densidad:
 
 
 
