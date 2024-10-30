@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-10-30">
+
+<title>Ejercicios de estadística multivariante, parte I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Estadistica_multivariante_parte_I_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Estadistica_multivariante_parte_I_files/libs/quarto-html/quarto.js"></script>
+<script src="Estadistica_multivariante_parte_I_files/libs/quarto-html/popper.min.js"></script>
+<script src="Estadistica_multivariante_parte_I_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Estadistica_multivariante_parte_I_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Estadistica_multivariante_parte_I_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Estadistica_multivariante_parte_I_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Estadistica_multivariante_parte_I_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Estadistica_multivariante_parte_I_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Estadistica_multivariante_parte_I_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problema-1" id="toc-problema-1" class="nav-link active" data-scroll-target="#problema-1">Problema 1</a>
+  <ul class="collapse">
+  <li><a href="#respuesta" id="toc-respuesta" class="nav-link" data-scroll-target="#respuesta">Respuesta</a></li>
+  </ul></li>
+  <li><a href="#problema-2" id="toc-problema-2" class="nav-link" data-scroll-target="#problema-2">Problema 2</a>
+  <ul class="collapse">
+  <li><a href="#respuesta-1" id="toc-respuesta-1" class="nav-link" data-scroll-target="#respuesta-1">Respuesta</a></li>
+  </ul></li>
+  <li><a href="#problema-3" id="toc-problema-3" class="nav-link" data-scroll-target="#problema-3">Problema 3</a>
+  <ul class="collapse">
+  <li><a href="#respuesta-al-apartado-a" id="toc-respuesta-al-apartado-a" class="nav-link" data-scroll-target="#respuesta-al-apartado-a">Respuesta al apartado a</a></li>
+  <li><a href="#respuesta-al-apartado-b" id="toc-respuesta-al-apartado-b" class="nav-link" data-scroll-target="#respuesta-al-apartado-b">Respuesta al apartado b</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ejercicios de estadística multivariante, parte I</h1>
+<p class="subtitle lead">20582- Análisis de Datos para el GMAT</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 30, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="problema-1" class="level2">
+<h2 class="anchored" data-anchor-id="problema-1">Problema 1</h2>
+<p>Simula un conjunto de datos que tenga 5 variables <span class="math inline">\(X_1, X_2, X_3, X_4, X_5\)</span>, con 50 observaciones que sigan distribuciones normales con diferentes medias y varianzas cada una. Establece que una o más de las variables sea una combinación lineal de las otras. Por ejemplo, puedes definir que: <span class="math inline">\(X_5 = 2X_1 + 3X_2\)</span>. Verifica que se cumple el teorema de la dimensión.</p>
+<section id="respuesta" class="level3">
+<h3 class="anchored" data-anchor-id="respuesta">Respuesta</h3>
+<p>Crearemos cuatro variables con normales de distinta media y varianza y, la quinta, la definiremos com el ejemplo del enunciado del problema:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>X_1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">2</span>) <span class="co">#N(1,2^2)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>X_2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">2</span>, <span class="at">sd =</span> <span class="dv">3</span>) <span class="co">#N(2,3^2)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>X_3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">3</span>, <span class="at">sd =</span> <span class="dv">6</span>) <span class="co">#N(3,6^2)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>X_4 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">4</span>, <span class="at">sd =</span> <span class="fl">1.5</span>) <span class="co">#N(4,(1.5)^2)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>X_5 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> X_1 <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> X_2 <span class="co">#N(2 * 1 + 3 * 2, 2^2 * 2^2 + 3^2 * 3^2)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">tibble</span> (</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_1 =</span> X_1,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_2 =</span> X_2,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_3 =</span> X_3,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_4 =</span> X_4,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_5 =</span> X_5</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 5
+      X_1    X_2    X_3   X_4     X_5
+    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1  1.69   3.80   1.40   1.55  14.8  
+ 2  1.26   7.90  10.7    2.00  26.2  
+ 3 -1.77   0.568 13.6    4.72  -1.85 
+ 4 -2.76  -3.85   5.47   4.68 -17.1  
+ 5  3.94  -4.50  -2.68   4.11  -5.63 
+ 6  2.84   0.588  1.95   4.14   7.44 
+ 7 -1.48  -1.17  -0.595  3.13  -6.47 
+ 8 -1.01   2.91   6.19   3.83   6.72 
+ 9 -0.525  2.15  -8.52   2.46   5.41 
+10  0.713 -0.333  2.43   1.03   0.428
+# ℹ 40 more rows</code></pre>
+</div>
+</div>
+<p>A continuación, comprobemos el teorema del rango. Este se aplica sobre la matriz de covarianzas <span class="math inline">\(S\)</span> y dice así:</p>
+<p>Si <span class="math inline">\(r = \text{rango}(S) \leq p\)</span> hay <span class="math inline">\(r\)</span> variables linealmente independientes y las otran <span class="math inline">\(p-r\)</span> variables son combinación lineal de estas <span class="math inline">\(r\)</span> variables.</p>
+<p>En nuestro caso, <span class="math inline">\(p = 5\)</span> y queremos comprobar que <span class="math inline">\(r = 4\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">50</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>S_muestra <span class="ot">=</span> <span class="fu">cov</span>(X) <span class="co">#Matriz de covarianzas muestral</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> (n<span class="dv">-1</span>)<span class="sc">/</span>n <span class="sc">*</span> S_muestra <span class="co">#Matriz de covarianzas</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           X_1        X_2        X_3        X_4        X_5
+X_1  4.1125625 -0.4672215 -1.3628273  0.4117053  6.8234607
+X_2 -0.4672215  9.2709885  0.6612753 -0.8060999 26.8785226
+X_3 -1.3628273  0.6612753 38.3882435  1.0787143 -0.7418287
+X_4  0.4117053 -0.8060999  1.0787143  2.0919299 -1.5948891
+X_5  6.8234607 26.8785226 -0.7418287 -1.5948891 94.2824892</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">qr</span>(S)<span class="sc">$</span>rank <span class="co">#Calculamos el rango usando la descomposición QR </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>Vemos que el rango es efectivamente <span class="math inline">\(4\)</span>.</p>
+</section>
+</section>
+<section id="problema-2" class="level2">
+<h2 class="anchored" data-anchor-id="problema-2">Problema 2</h2>
+<p>Simula un conjunto de datos <span class="math inline">\(X\)</span> con 4 variables y 50 observaciones que sigan distribuciones normales con diferentes medias y varianzas.</p>
+<p>Define una matriz de transformación lineal <span class="math inline">\(T\)</span> de escalamiento (solo tiene valores diferentes de cero en su diagonal, lo que implica que cada variable se escala de manera independiente sin interacción con las otras variables), de la siguiente forma:</p>
+<ul>
+<li><p>Escala la primera variable por 2.</p></li>
+<li><p>Escala la segunda variable por 0.5.</p></li>
+<li><p>Escala la tercera variable por 1.5.</p></li>
+<li><p>Mantener la cuarta variable sin cambios.</p></li>
+</ul>
+<p>Ahora, transforma la matriz de datos <span class="math inline">\(X\)</span> en una nueva matriz <span class="math inline">\(Y = X T\)</span>. Calcula el vector de medias <span class="math inline">\(\mu_Y\)</span> de las variables transformadas y la matriz de covarianzas <span class="math inline">\(\Sigma_Y\)</span>. Verifica tus resultados con las funciones <code>colMeans()</code> y <code>cov()</code> de R.</p>
+<section id="respuesta-1" class="level3">
+<h3 class="anchored" data-anchor-id="respuesta-1">Respuesta</h3>
+<p>Aprovechamos las variables que hemos creado para el anterior problema, así que quitamos la última variable del tibble:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> X <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="dv">5</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 4
+      X_1    X_2    X_3   X_4
+    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1  1.69   3.80   1.40   1.55
+ 2  1.26   7.90  10.7    2.00
+ 3 -1.77   0.568 13.6    4.72
+ 4 -2.76  -3.85   5.47   4.68
+ 5  3.94  -4.50  -2.68   4.11
+ 6  2.84   0.588  1.95   4.14
+ 7 -1.48  -1.17  -0.595  3.13
+ 8 -1.01   2.91   6.19   3.83
+ 9 -0.525  2.15  -8.52   2.46
+10  0.713 -0.333  2.43   1.03
+# ℹ 40 more rows</code></pre>
+</div>
+</div>
+<p>A continuación, definimos la matriz <span class="math inline">\(T\)</span> y transformamos los datos de la siguiente manera <span class="math inline">\(Y = X \cdot T\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>             <span class="dv">0</span>,<span class="fl">0.5</span>,<span class="dv">0</span>,<span class="dv">0</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>             <span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">as.matrix</span>(X)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> X <span class="sc">%*%</span> T</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            [,1]        [,2]        [,3]     [,4]
+ [1,]  3.3820225  1.90102623   2.1050956 1.553398
+ [2,]  2.5213083  3.94983071  16.0690503 2.002181
+ [3,] -3.5482970  0.28384701  20.3962530 4.719139
+ [4,] -5.5105576 -1.92605821   8.2021959 4.683031
+ [5,]  7.8765009 -2.25134126  -4.0234316 4.109388
+ [6,]  5.6757842  0.29379604   2.9305479 4.143378
+ [7,] -2.9556796 -0.58518897  -0.8920159 3.126859
+ [8,] -2.0144700  1.45640512   9.2889523 3.833297
+ [9,] -1.0504855  1.07712735 -12.7753211 2.460134
+[10,]  1.4261988 -0.16635900   3.6520450 1.032055
+[11,]  1.2135731 -1.55775713   3.9206593 4.194186
+[12,] -0.5513168  2.29409898   4.5633372 5.708695
+[13,] -2.1962954  1.23814245   4.5167550 4.800987
+[14,]  7.2933089 -0.63073907 -21.9106568 2.748900
+[15,]  2.1620597 -0.69324360   4.2269966 4.215089
+[16,]  2.5910158 -1.33821507   7.8260801 5.184472
+[17,]  0.7985421 -0.40898645  18.5560587 2.565908
+[18,]  6.7595312  1.20362598  16.1975719 3.268305
+[19,]  5.3566798  1.40123589  10.7568767 3.719091
+[20,]  0.3963730 -1.22255210 -10.6538011 5.262842
+[21,] -0.2192184  2.23493253 -14.0879012 3.213993
+[22,] -1.2032304  1.44344728  -8.2048743 4.602453
+[23,] -4.0202364  1.11041343   8.1092739 2.372355
+[24,]  2.4718241 -0.76246947  16.4057171 5.487142
+[25,]  6.2499463 -1.53662058  15.2066979 5.387508
+[26,]  6.2653631  1.61638013  -6.5396605 2.533601
+[27,]  1.7207871  3.38654561   9.8717437 2.819458
+[28,] -4.0084455  0.82774034   7.3874142 3.561602
+[29,] -1.0574306  1.84003462   9.6660695 4.151234
+[30,]  3.8140290  0.80959444   2.9378508 1.854716
+[31,]  4.2834791  0.58039436  -9.3090003 7.647510
+[32,]  0.8287602 -0.48814177  11.7749640 3.678166
+[33,]  2.9877071  1.63324991   9.1635955 4.454582
+[34,]  4.4470368  0.09143477   5.3724930 7.735133
+[35,] -0.9128925 -1.80618703   2.7478468 1.256679
+[36,] -6.6423476  1.84646163   4.5585535 2.991455
+[37,]  8.5813016 -0.59410644  -4.1681418 5.041800
+[38,]  9.5527846  0.69402180   8.7023507 2.659866
+[39,]  3.6033106  1.30551347   3.1434605 4.704586
+[40,]  4.5448845  1.23871073   7.5942359 5.078609
+[41,]  8.0422479  0.83529522   9.1628894 5.479800
+[42,] -5.1736141  0.69619600  -5.9041208 2.728902
+[43,]  0.7122649 -1.78609915   6.1873635 6.125360
+[44,]  2.5586191  0.52680482   2.8253723 3.982776
+[45,] -6.6469988 -0.98592247  11.4479168 3.840203
+[46,]  5.9038829 -2.34752924   9.0693434 4.731721
+[47,]  6.3509299  1.34372541 -14.1784954 3.371262
+[48,]  0.2747200  1.11991474  -5.3524143 3.027251
+[49,]  0.3327210  2.72548338  -1.9900251 3.414033
+[50,]  0.8820500  3.83318891  17.3579724 5.889228</code></pre>
+</div>
+</div>
+<p>Finalmente, comprobamos que las funciones de R hacen lo que tocan:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mu_Y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">sum</span>(Y[,<span class="dv">1</span>]), <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">sum</span>(Y[,<span class="dv">2</span>]), <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">sum</span>(Y[,<span class="dv">3</span>]), <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">sum</span>(Y[,<span class="dv">4</span>]))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mu_Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.683001 0.515022 3.838235 3.943086</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>medias <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">colSums</span>(Y)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>medias</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.683001 0.515022 3.838235 3.943086</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>medias_2 <span class="ot">=</span> <span class="fu">colMeans</span>(Y)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>medias_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.683001 0.515022 3.838235 3.943086</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construimos H</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>unos <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">1</span>,n), <span class="at">nrow =</span> n, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>J <span class="ot">=</span> unos <span class="sc">%*%</span> <span class="fu">t</span>(unos)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>I <span class="ot">=</span> <span class="fu">diag</span>(n) </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>H <span class="ot">=</span> I <span class="sc">-</span> <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> J</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculamos la matriz de covarianzas con H</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">t</span>(X) <span class="sc">%*%</span> H <span class="sc">%*%</span> X <span class="co"># Necesitamos la mariz de covarianzas de X</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>S_Y <span class="ot">=</span> <span class="fu">t</span>(T) <span class="sc">%*%</span> S <span class="sc">%*%</span> T</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>S_Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]       [,3]       [,4]
+[1,] 16.4502501 -0.4672215 -4.0884818  0.8234106
+[2,] -0.4672215  2.3177471  0.4959564 -0.4030500
+[3,] -4.0884818  0.4959564 86.3735478  1.6180714
+[4,]  0.8234106 -0.4030500  1.6180714  2.0919299</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>matriz_cov_Y <span class="ot">=</span> (n<span class="dv">-1</span>)<span class="sc">/</span>n <span class="sc">*</span> <span class="fu">cov</span>(Y)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>matriz_cov_Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]       [,3]       [,4]
+[1,] 16.4502501 -0.4672215 -4.0884818  0.8234106
+[2,] -0.4672215  2.3177471  0.4959564 -0.4030500
+[3,] -4.0884818  0.4959564 86.3735478  1.6180714
+[4,]  0.8234106 -0.4030500  1.6180714  2.0919299</code></pre>
+</div>
+</div>
+<p>Vemos que da lo mismo :)</p>
+</section>
+</section>
+<section id="problema-3" class="level2">
+<h2 class="anchored" data-anchor-id="problema-3">Problema 3</h2>
+<p>Genera una matriz de datos simulados de tamaño <span class="math inline">\(100 \times 3\)</span> con distribución normal multivariante.</p>
+<p>Calcula la distancia de Mahalanobis para cada observación con respecto a la media del conjunto de datos.</p>
+<p>Considera la matriz de transformación lineal <span class="math inline">\(T\)</span> que mezcla las variables mediante rotaciones y escalamientos. Por ejemplo, puedes definir la matriz de transformación expresada de la siguiente forma:</p>
+<p><span class="math display">\[T = \begin{pmatrix}
+1.2 &amp; 0.3 &amp; 0.0 \\
+0.2 &amp; 1.1 &amp; 0.0 \\
+0.0 &amp; 0.0 &amp; 1.5
+\end{pmatrix}\]</span></p>
+<p>Aplique la transformación a la matriz de datos y calcule la distancia de Mahalanobis para cada observación con respecto a la media del conjunto de datos transformado.</p>
+<ol type="a">
+<li><p>¿Son las distancias de Mahalanobis iguales antes y después de la transformación lineal? Explica.</p></li>
+<li><p>La distancia de Mahalanobis al cuadrado debería seguir una distribución <span class="math inline">\(\chi^2\)</span> con <span class="math inline">\(p\)</span> grados de libertad, donde <span class="math inline">\(p\)</span> es el número de variables. Verifica si esto se cumple en tu caso. Justifica tu respuesta en función del test estadístico apropiado y un gráfico.</p></li>
+</ol>
+<section id="respuesta-al-apartado-a" class="level3">
+<h3 class="anchored" data-anchor-id="respuesta-al-apartado-a">Respuesta al apartado a</h3>
+<p>Primero definimos la matriz <span class="math inline">\(X\)</span> de dimensión <span class="math inline">\(100 \times 3\)</span> que siga una normal multivariante:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n, mu, Sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ahora calculemos la distancia de Mahalanobis de cada punto respecto a la media del conjunto de datos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sacamos primero la media del conjunto de datos:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mu_datos <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>n <span class="sc">*</span> <span class="fu">colSums</span>(X)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Distancia de Mahalanobis (necesitamos la matriz de covarianzas y su inversa)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">cov</span>(X)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>S_inversa <span class="ot">=</span> <span class="fu">solve</span>(S)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>dmahalanobis_a_mano <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  d_sq <span class="ot">=</span> <span class="fu">t</span>(X[i,] <span class="sc">-</span> mu_datos) <span class="sc">%*%</span> S_inversa <span class="sc">%*%</span> (X[i,] <span class="sc">-</span> mu_datos)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">=</span> <span class="fu">sqrt</span>(d_sq)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  dmahalanobis_a_mano[i] <span class="ot">=</span> dmahalanobis_a_mano[i] <span class="sc">+</span> d</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>dmahalanobis_a_mano</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 0.5001869 1.1320649 2.2092170 1.3892691 0.9865764 1.1872157 2.0145723
+  [8] 1.2042012 1.1222305 1.4713677 0.7334158 0.8859374 2.5182071 1.7725268
+ [15] 2.5964570 2.4222383 1.0948532 3.1452594 1.4610442 0.7922146 3.1705585
+ [22] 1.7194641 1.6320779 0.8585305 1.0453567 2.2736432 1.7878161 1.7937748
+ [29] 1.7686007 0.5164398 1.6350075 1.8402986 1.8049683 1.8277554 0.6366677
+ [36] 0.9648255 1.2513488 1.4954252 2.2237487 2.0977491 0.4643099 1.6611042
+ [43] 1.1468278 1.5500508 2.4201594 2.2019860 2.4534372 1.6678102 1.3886115
+ [50] 2.0187805 1.7423002 1.7580802 1.0117617 1.6475447 1.9288975 1.4869454
+ [57] 1.6717671 2.3236159 1.3437115 1.2313987 1.1505235 0.8135491 2.6868562
+ [64] 1.0110522 0.7529258 2.9426153 1.6827654 0.9270093 0.7535908 1.2708703
+ [71] 0.3445284 1.8186365 1.7892710 0.5808545 1.0648883 1.1606513 1.3037406
+ [78] 2.8646105 2.0334355 1.1266791 0.8007897 1.2260288 1.2894131 1.1125637
+ [85] 1.3733245 2.3495960 1.0188736 2.9159025 1.9506684 1.0996573 0.9778756
+ [92] 2.3948269 0.5572517 1.8874966 2.5093667 1.3596770 2.6003924 2.4201087
+ [99] 1.7745165 3.0606100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Más rápido</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>dmahalanobis <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mahalanobis</span>(X,mu_datos,S))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>dmahalanobis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 0.5001869 1.1320649 2.2092170 1.3892691 0.9865764 1.1872157 2.0145723
+  [8] 1.2042012 1.1222305 1.4713677 0.7334158 0.8859374 2.5182071 1.7725268
+ [15] 2.5964570 2.4222383 1.0948532 3.1452594 1.4610442 0.7922146 3.1705585
+ [22] 1.7194641 1.6320779 0.8585305 1.0453567 2.2736432 1.7878161 1.7937748
+ [29] 1.7686007 0.5164398 1.6350075 1.8402986 1.8049683 1.8277554 0.6366677
+ [36] 0.9648255 1.2513488 1.4954252 2.2237487 2.0977491 0.4643099 1.6611042
+ [43] 1.1468278 1.5500508 2.4201594 2.2019860 2.4534372 1.6678102 1.3886115
+ [50] 2.0187805 1.7423002 1.7580802 1.0117617 1.6475447 1.9288975 1.4869454
+ [57] 1.6717671 2.3236159 1.3437115 1.2313987 1.1505235 0.8135491 2.6868562
+ [64] 1.0110522 0.7529258 2.9426153 1.6827654 0.9270093 0.7535908 1.2708703
+ [71] 0.3445284 1.8186365 1.7892710 0.5808545 1.0648883 1.1606513 1.3037406
+ [78] 2.8646105 2.0334355 1.1266791 0.8007897 1.2260288 1.2894131 1.1125637
+ [85] 1.3733245 2.3495960 1.0188736 2.9159025 1.9506684 1.0996573 0.9778756
+ [92] 2.3948269 0.5572517 1.8874966 2.5093667 1.3596770 2.6003924 2.4201087
+ [99] 1.7745165 3.0606100</code></pre>
+</div>
+</div>
+<p>Ahora, hagamos lo mismo con <span class="math inline">\(Y = X \cdot T\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>T <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">1.2</span>, <span class="fl">0.3</span>, <span class="fl">0.0</span>, <span class="fl">0.2</span>, <span class="fl">1.1</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.5</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> X <span class="sc">%*%</span> T</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>dmahalanobis_Y <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">mahalanobis</span>(Y,<span class="fu">colMeans</span>(Y),<span class="fu">cov</span>(Y)))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>dmahalanobis_Y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 0.5001869 1.1320649 2.2092170 1.3892691 0.9865764 1.1872157 2.0145723
+  [8] 1.2042012 1.1222305 1.4713677 0.7334158 0.8859374 2.5182071 1.7725268
+ [15] 2.5964570 2.4222383 1.0948532 3.1452594 1.4610442 0.7922146 3.1705585
+ [22] 1.7194641 1.6320779 0.8585305 1.0453567 2.2736432 1.7878161 1.7937748
+ [29] 1.7686007 0.5164398 1.6350075 1.8402986 1.8049683 1.8277554 0.6366677
+ [36] 0.9648255 1.2513488 1.4954252 2.2237487 2.0977491 0.4643099 1.6611042
+ [43] 1.1468278 1.5500508 2.4201594 2.2019860 2.4534372 1.6678102 1.3886115
+ [50] 2.0187805 1.7423002 1.7580802 1.0117617 1.6475447 1.9288975 1.4869454
+ [57] 1.6717671 2.3236159 1.3437115 1.2313987 1.1505235 0.8135491 2.6868562
+ [64] 1.0110522 0.7529258 2.9426153 1.6827654 0.9270093 0.7535908 1.2708703
+ [71] 0.3445284 1.8186365 1.7892710 0.5808545 1.0648883 1.1606513 1.3037406
+ [78] 2.8646105 2.0334355 1.1266791 0.8007897 1.2260288 1.2894131 1.1125637
+ [85] 1.3733245 2.3495960 1.0188736 2.9159025 1.9506684 1.0996573 0.9778756
+ [92] 2.3948269 0.5572517 1.8874966 2.5093667 1.3596770 2.6003924 2.4201087
+ [99] 1.7745165 3.0606100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(dmahalanobis <span class="sc">-</span> dmahalanobis_Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -4.440892e-16  1.110223e-15</code></pre>
+</div>
+</div>
+<p>Como las diferencias estan comprendidas entre <span class="math inline">\(-1.3322 \cdot 10 ^{-15}\)</span> y <span class="math inline">\(8.8817 \cdot 10^{-16}\)</span> se parecen a la profundidad de la máquina, entendemos que en realidad estas distancias son iguales.</p>
+<p>Esto se debe a que en realidad esta distancia es invariante a transformaciones lineales invertibles.</p>
+</section>
+<section id="respuesta-al-apartado-b" class="level3">
+<h3 class="anchored" data-anchor-id="respuesta-al-apartado-b">Respuesta al apartado b</h3>
+<p>Hay que hacer un gráfico de la distribución de una <span class="math inline">\(\chi^2\)</span> con <span class="math inline">\(p\)</span> grados de libertad (o simular 100 de manera random) y mostrar en el mismo gráfico la distribución de los <span class="math inline">\(100\)</span> valores del apartado a al cuadrado:</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
