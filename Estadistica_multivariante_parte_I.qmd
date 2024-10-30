@@ -1,0 +1,219 @@
+---
+title: "Ejercicios de estadística multivariante, parte I"
+subtitle: "20582- Análisis de Datos para el GMAT"
+date: today
+format:
+  html:
+    theme: lumen
+    toc: true
+    toc-depth: 3
+Rendering:
+    embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(readr)
+```
+
+## Problema 1
+
+Simula un conjunto de datos que tenga 5 variables $X_1, X_2, X_3, X_4, X_5$, con 50 observaciones que sigan distribuciones normales con diferentes medias y varianzas cada una. Establece que una o más de las variables sea una combinación lineal de las otras. Por ejemplo, puedes definir que: $X_5 = 2X_1 + 3X_2$. Verifica que se cumple el teorema de la dimensión.
+
+### Respuesta
+
+Crearemos cuatro variables con normales de distinta media y varianza y, la quinta, la definiremos com el ejemplo del enunciado del problema:
+```{r}
+X_1 <- rnorm(n = 50, mean = 1, sd = 2) #N(1,2^2)
+X_2 <- rnorm(n = 50, mean = 2, sd = 3) #N(2,3^2)
+X_3 <- rnorm(n = 50, mean = 3, sd = 6) #N(3,6^2)
+X_4 <- rnorm(n = 50, mean = 4, sd = 1.5) #N(4,(1.5)^2)
+X_5 <- 2 * X_1 + 3 * X_2 #N(2 * 1 + 3 * 2, 2^2 * 2^2 + 3^2 * 3^2)
+
+X <- tibble (
+  X_1 = X_1,
+  X_2 = X_2,
+  X_3 = X_3,
+  X_4 = X_4,
+  X_5 = X_5
+)
+
+X
+```
+A continuación, comprobemos el teorema del rango. Este se aplica sobre la matriz de covarianzas $S$ y dice así:
+
+Si $r = \text{rango}(S) \leq p$ hay $r$ variables linealmente independientes y las otran $p-r$ variables son combinación lineal de estas $r$ variables.
+
+En nuestro caso, $p = 5$ y queremos comprobar que $r = 4$.
+
+```{r}
+n = 50
+
+S_muestra = cov(X) #Matriz de covarianzas muestral
+
+S = (n-1)/n * S_muestra #Matriz de covarianzas
+
+S
+
+r = qr(S)$rank #Calculamos el rango usando la descomposición QR 
+
+r
+```
+
+Vemos que el rango es efectivamente $4$.
+
+## Problema 2
+
+Simula un conjunto de datos $X$ con 4 variables y 50 observaciones que sigan distribuciones normales con diferentes medias y varianzas. 
+
+Define una matriz de transformación lineal $T$ de escalamiento (solo tiene valores diferentes de cero en su diagonal, lo que implica que cada variable se escala de manera independiente sin interacción con las otras variables), de la siguiente forma:
+
+* Escala la primera variable por 2.
+
+* Escala la segunda variable por 0.5.
+
+* Escala la tercera variable por 1.5.
+
+* Mantener la cuarta variable sin cambios.
+
+Ahora, transforma la matriz de datos $X$ en una nueva matriz $Y = X T$. Calcula el vector de medias $\mu_Y$ de las variables transformadas y la matriz de covarianzas $\Sigma_Y$. Verifica tus resultados con las funciones `colMeans()` y `cov()` de R.
+
+### Respuesta
+Aprovechamos las variables que hemos creado para el anterior problema, así que quitamos la última variable del tibble:
+
+```{r}
+X <- X %>% select(-c(5))
+X
+```
+
+A continuación, definimos la matriz $T$ y transformamos los datos de la siguiente manera $Y = X \cdot T$:
+
+```{r}
+T = matrix(c(2,0,0,0,
+             0,0.5,0,0,
+             0,0,1.5,0,
+             0,0,0,1),
+           nrow = 4, byrow = TRUE)
+
+X = as.matrix(X)
+
+Y = X %*% T
+
+print(Y)
+```
+
+Finalmente, comprobamos que las funciones de R hacen lo que tocan:
+
+```{r}
+mu_Y = c(1/n * sum(Y[,1]), 1/n * sum(Y[,2]), 1/n * sum(Y[,3]), 1/n * sum(Y[,4]))
+mu_Y
+
+medias = 1/n * colSums(Y)
+medias
+
+medias_2 = colMeans(Y)
+medias_2
+
+# Construimos H
+unos = matrix(rep(1,n), nrow = n, byrow = FALSE)
+J = unos %*% t(unos)
+I = diag(n) 
+H = I - 1/n * J
+
+# Calculamos la matriz de covarianzas con H
+S = 1/n * t(X) %*% H %*% X # Necesitamos la mariz de covarianzas de X
+
+S_Y = t(T) %*% S %*% T
+S_Y
+
+matriz_cov_Y = (n-1)/n * cov(Y)
+matriz_cov_Y
+```
+
+Vemos que da lo mismo :)
+
+## Problema 3
+
+Genera una matriz de datos simulados de tamaño 
+$100 \times 3$ con distribución normal multivariante.
+
+Calcula la distancia de Mahalanobis para cada observación con respecto a la media del conjunto de datos.
+
+Considera la matriz de transformación lineal $T$ que mezcla las variables mediante rotaciones y escalamientos. Por ejemplo, puedes definir la matriz de transformación expresada de la siguiente forma:
+
+$$T = \begin{pmatrix}
+1.2 & 0.3 & 0.0 \\
+0.2 & 1.1 & 0.0 \\
+0.0 & 0.0 & 1.5
+\end{pmatrix}$$
+
+Aplique la transformación a la matriz de datos y calcule la distancia de Mahalanobis para cada observación con respecto a la media del conjunto de datos transformado.
+
+a. ¿Son las distancias de Mahalanobis iguales antes y después de la transformación lineal? Explica.
+
+b. La distancia de Mahalanobis al cuadrado debería seguir una distribución $\chi^2$ con $p$ grados de libertad, donde $p$ es el número de variables. Verifica si esto se cumple en tu caso. Justifica tu respuesta en función del test estadístico apropiado y un gráfico.
+
+### Respuesta al apartado a
+
+Primero definimos la matriz $X$ de dimensión $100 \times 3$ que siga una normal multivariante:
+```{r}
+library(MASS)
+
+n <- 100
+mu <- c(1, 2, 0)
+Sigma <- matrix(c(1, 0.5, 0.25, 0.5, 1, 0.5, 0.25, 0.5, 1), 3, 3)
+X <- mvrnorm(n, mu, Sigma)
+```
+
+Ahora calculemos la distancia de Mahalanobis de cada punto respecto a la media del conjunto de datos
+
+```{r}
+# Sacamos primero la media del conjunto de datos:
+
+mu_datos = 1/n * colSums(X)
+
+# Distancia de Mahalanobis (necesitamos la matriz de covarianzas y su inversa)
+
+S = cov(X)
+S_inversa = solve(S)
+
+dmahalanobis_a_mano = rep(0,100)
+for(i in 1:100) {
+  d_sq = t(X[i,] - mu_datos) %*% S_inversa %*% (X[i,] - mu_datos)
+  d = sqrt(d_sq)
+  dmahalanobis_a_mano[i] = dmahalanobis_a_mano[i] + d
+}
+dmahalanobis_a_mano
+
+# Más rápido
+dmahalanobis = sqrt(mahalanobis(X,mu_datos,S))
+dmahalanobis
+```
+
+Ahora, hagamos lo mismo con $Y = X \cdot T$:
+```{r}
+T = matrix(c(1.2, 0.3, 0.0, 0.2, 1.1, 0.0, 0.0, 0.0, 1.5), 3, 3)
+Y = X %*% T
+
+dmahalanobis_Y = sqrt(mahalanobis(Y,colMeans(Y),cov(Y)))
+dmahalanobis_Y
+
+range(dmahalanobis - dmahalanobis_Y)
+
+```
+Como las diferencias estan comprendidas entre $-1.3322 \cdot 10 ^{-15}$ y $8.8817 \cdot 10^{-16}$ se parecen a la profundidad de la máquina, entendemos que en realidad estas distancias son iguales.
+
+Esto se debe a que en realidad esta distancia es invariante a transformaciones lineales invertibles.
+
+### Respuesta al apartado b
+
+Hay que hacer un gráfico de la distribución de una $\chi^2$ con $p$ grados de libertad (o simular 100 de manera random) y mostrar en el mismo gráfico la distribución de los $100$ valores del apartado a al cuadrado:
+
+
+
+
+

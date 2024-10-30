@@ -1,0 +1,130 @@
+---
+title: "Ejercicios de estadística multivariante, parte II"
+subtitle: "20582- Análisis de Datos para el GMAT"
+date: today
+format:
+  html:
+    theme: lumen
+    toc: true
+    toc-depth: 3
+Rendering:
+    embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+
+# Problema 1
+
+Supongamos que un analista financiero quiere estudiar la relación entre tres tipos de activos financieros: el precio de una acción $X_1$, la tasa de interés de un bono $X_2$, y el precio de una materia prima $X_3$. Se asume que el vector $\mathbf{X} = (X_1, X_2, X_3)^t$ sigue una distribución normal multivariante con media 
+$\mu = (-1, 1, 0)^t$  y matriz de covarianzas
+
+$$
+\Sigma = \begin{pmatrix}
+1 & 0 & 1 \\
+0 & 3 & 1 \\
+1 & 1 & 2
+\end{pmatrix}
+$$
+
+
+(a) El analista quiere conocer el rendimiento de una cartera que ponderada los tres indicadores de la siguiente forma $Y= X_1 + 2X_2 - 3X_3$. ¿Cuál es la distribución de dicha estrategia? Evalúa su riesgo (varianza) y su valor esperado.
+
+#### Respuesta
+
+
+
+(b) El analista desea encontrar una estrategia que elimine  la correlación entre el precio de la acción $X_1$ y una combinación lineal de la tasa de interés $X_2$ y el precio de la materia prima $X_3$. Encuentra un vector $a_{(2\times 1)}$, tal que las variables $X_1$ y $X_1 - a^t \begin{pmatrix} X_2 \\ X_3 \end{pmatrix}$ sean independientes.
+
+#### Respuesta
+
+
+
+(c) Calcula la distribución de $X_3$ condicionada a $X_1 = x_1$ y $X_2 = x_2$. Este cálculo es útil para predecir el comportamiento del precio de la materia prima $X_3$, dada la información observada sobre el precio de la acción $X_1$ y la tasa de interés del bono $X_2$.
+
+
+#### Respuesta
+
+
+
+## Problema 2
+
+Considera la muestra
+
+$$
+\mathbf{X} = \begin{pmatrix}
+2 & 6 & -3 \\
+-4 & 8 & 7 \\
+-2 & 9 & 7 \\
+-7 & 8 & 2
+\end{pmatrix}
+$$
+
+de una población $\mathcal{N}_3(\mu, \Sigma)$ con $\mu$ y $\Sigma$ desconocidos.
+
+(a) Calcula el estimador de máxima verosimilitud de $\mu$
+
+(b) Calcula un estimador insesgado de $\Sigma$
+
+
+### Problema 3
+
+En una investigación sobre la satisfacción de los clientes de una cadena de tiendas de tecnología, se ha recogido una muestra aleatoria de datos de 100 clientes en relación con tres variables:
+
+* $\mathbf{X_1}:$ Tiempo de espera en minutos.
+* $\mathbf{X_2:}$ Número de productos comprados.
+* $\mathbf{X_3:}$ Valor total de la compra en euros.
+
+El equipo de análisis de datos ha recopilado información de los clientes y busca determinar si el conjunto de datos sigue una distribución normal multivariante, lo cual es un requisito fundamental para aplicar ciertos modelos estadísticos. Para verificar este supuesto, te piden que emplees la distancia de Mahalanobis al cuadrado como medida clave y que realices una prueba de bondad de ajuste con el fin de evaluar si los valores calculados se ajustan a la distribución esperada. Los datos se encuentran en [clientes](https://github.com/igmuib/Talleres_AD_Medicina/blob/main/clientes.csv). 
+
+#### Respuesta
+
+
+### Problema 5
+
+Una distribución muy relacionada con la ley normal multivariante, y que es el análogo multivariante de la ley $\chi^2$, es la distribución Wishart. Dados $X_1, \dots, X_n$, vectores aleatorios i.i.d. $X_i \sim \mathcal{N}_p(0, \Sigma)$, la matriz $p \times p$
+
+$$
+Q = \sum_{i=1}^n X_i X_i^t \sim W_p(\Sigma, n)
+$$
+
+sigue una ley Wishart con parámetro de escala $\Sigma$ y $n$ grados de libertad. Dadas las variables aleatorias $Z \sim \mathcal{N}_p(0, I)$ y $Q \sim W_p(I, n)$ estocásticamente independientes, la variable aleatoria
+
+$$
+T^2 = n Z^t Q^{-1} Z \sim T^2(p, n)
+$$
+
+sigue una ley $T^2$ de Hotelling con $p$ y $n$ grados de libertad. Si $p = 1$, entonces $T^2(1, n)$ es el cuadrado de una variable aleatoria con ley $t$ de Student y $n$ grados de libertad. En general, $T^2(p, n)$ es proporcional a una $F$ de Fisher
+
+$$
+\frac{n - p + 1}{np} T^2(p, n) = F(p, n - p + 1).
+$$
+
+La variable $T^2$ se utiliza de manera análoga a la ley $t$ de Student, en contrastes sobre medias multivariantes. 
+
+Para $p$ y $n$ fijos, genera una muestra de una ley $T^2(p, n)$ de Hotelling. Representa los resultados mediante un histograma. Luego, investiga la función `rHotelling` del paquete `EnvStats` y compara los resultados obtenidos con los de la simulación.
+
+#### Respuesta
+
+### Problema 6
+
+Si $A \sim W_p(\Sigma, a)$ y $B \sim W_p(\Sigma, b)$ son independientes, $\Sigma$ es regular y $a \geq p$, la variable aleatoria
+
+$$
+\Lambda = \frac{|\mathbf{A}|}{|\mathbf{A} + \mathbf{B}|}
+$$
+
+tiene una ley Lambda de Wilks, $\Lambda(a, p, b)$, con parámetros $p$, $a$, y $b$.
+
+La ley $\Lambda$ no depende del parámetro $\Sigma$ de $A$ y $B$, por lo que es suficiente considerarla para $\Sigma = I$. Tiene la misma distribución que un producto de variables aleatorias independientes con distribución Beta, es decir, si $u_i \sim \text{Beta}\left( \frac{a + i - 1}{2}, \frac{b + i - 1}{2} \right)$, entonces
+
+$$
+L = \prod_{i=1}^p u_i, \quad \text{donde } u_i \sim \text{Beta}\left( \frac{a + i - p}{2}, \frac{b}{2} \right).
+$$
+
+Genera una muestra de una ley $\Lambda$ de Wilks. Representa los resultados mediante un histograma. Luego, investiga la función `rWilksLambda` del paquete `EnvStats` y compara los resultados obtenidos con los de la simulación.
+
+#### Respuesta
