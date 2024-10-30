@@ -35,6 +35,49 @@ $$
 
 #### Respuesta
 
+```{r}
+mu = matrix(c(-1,1,0), nrow = 3)
+Sigma = matrix(c(1, 0, 1,
+                 0, 3, 1,
+                1, 1, 2), nrow = 3, byrow = TRUE)
+```
+Sabemos que cada variable marginal sigue una normal $N(\mu_i, \sigma_{ii})$, por tanto, hay que comprobar si son independientes para poder decir que $Y$ sigue una distribución $N(-1 + 2 \cdot 1 - 3 \cdot 0, 1^2 \cdot 1 + 2^2 \cdot 3 + (-3)^2 \cdot 2) = N(1, 31)$. Así, su valor esperado será de $1$ y el riesgo de $31$. Lamentablemente este no parece el caso como podemos ver justo abajo (su varianza parece menor):
+
+```{r}
+library(MASS)
+
+X = mvrnorm(n = 10000, mu, Sigma)
+
+Y = 1 * X[,1] + 2 * X[,2] - 3 * X[,3]
+
+```
+
+Así, usemos otro método para encontrar dicha media y varianza:
+
+```{r}
+# Definimos el vector de coeficientes para la combinación lineal
+a <- c(1, 2, -3)
+
+# Calculamos la media y varianza de la combinación lineal
+media_Y <- sum(t(a) %*% mu) # a^T * mu
+varianza_Y <- t(a) %*% Sigma %*% a # a^T * Sigma * a es la varianza poblacional
+
+# Imprimimos los resultados
+cat("Media de Y:", media_Y, "\n")
+cat("Varianza de Y:", varianza_Y, "\n")
+```
+```{r}
+# Saquemos la media y la varianza de los datos para comparar:
+media_Y_datos = mean(Y)
+varianza_Y_datos = var(Y) #var muestral
+
+# Imprimimos los resultados
+cat("Media de los datos de Y:", media_Y_datos, "\n")
+cat("Varianza de los datos de Y:", varianza_Y_datos, "\n")
+
+```
+Vemos que efectivamente se van acercando los datos a dicha distribución y así concluimos que el riesgo es de $13$ y el valor esperado es $1$.
+
 
 
 (b) El analista desea encontrar una estrategia que elimine  la correlación entre el precio de la acción $X_1$ y una combinación lineal de la tasa de interés $X_2$ y el precio de la materia prima $X_3$. Encuentra un vector $a_{(2\times 1)}$, tal que las variables $X_1$ y $X_1 - a^t \begin{pmatrix} X_2 \\ X_3 \end{pmatrix}$ sean independientes.
